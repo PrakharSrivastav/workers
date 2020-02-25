@@ -3,7 +3,6 @@ package worker
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -78,5 +77,5 @@ func callApi(num,id int , c *http.Client) {
 		fmt.Printf("error reading response body :: error is %+v", num, err)
 		return
 	}
-	log.Printf("%d  :: ok", id)
+	//log.Printf("%d  :: ok", id)
 }
