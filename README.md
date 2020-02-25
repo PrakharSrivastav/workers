@@ -37,7 +37,7 @@ ok      github.com/PrakharSrivastav/workers/b_concurrent     8.630s
 ### benchmark with 2 workers
 
 ```shell script
-prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                    ~/Workspace/examples/blog.examples/understanding-context
+prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                    
 goos: linux
 goarch: amd64
 pkg: github.com/PrakharSrivastav/workers/b_concurrent
@@ -50,7 +50,7 @@ ok      github.com/PrakharSrivastav/workers/b_concurrent     4.422s
 
 ### benchmark with 4 workers
 ```shell script
-prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                    ~/Workspace/examples/blog.examples/understanding-context
+prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                   
 goos: linux
 goarch: amd64
 pkg: github.com/PrakharSrivastav/workers/b_concurrent
@@ -62,7 +62,7 @@ ok      github.com/PrakharSrivastav/workers/b_concurrent     2.399s
 
 ### benchmark with 8 workers
 ```shell script
-prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                    ~/Workspace/examples/blog.examples/understanding-context
+prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                   
 goos: linux
 goarch: amd64
 pkg: github.com/PrakharSrivastav/workers/b_concurrent
@@ -74,7 +74,7 @@ ok      github.com/PrakharSrivastav/workers/b_concurrent     3.554s
 
 ### benchmark with 16 workers
 ```shell script
-prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                    ~/Workspace/examples/blog.examples/understanding-context
+prakhar@tardis (master)✗ % go test -bench=.                                                                                                                                   
 goos: linux
 goarch: amd64
 pkg: github.com/PrakharSrivastav/workers/b_concurrent
