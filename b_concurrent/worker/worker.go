@@ -3,7 +3,6 @@ package worker
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 )
@@ -64,19 +63,19 @@ func callApi(num,id int , c *http.Client) {
 	ur := fmt.Sprintf(baseURL, num)
 	req, err := http.NewRequest(http.MethodGet, ur, nil)
 	if err != nil {
-		log.Printf("error creating a request for term %d :: error is %+v", num, err)
+		//log.Printf("error creating a request for term %d :: error is %+v", num, err)
 		return
 	}
 	res, err := c.Do(req)
 	if err != nil {
-		log.Printf("error querying for term %d :: error is %+v", num, err)
+		//log.Printf("error querying for term %d :: error is %+v", num, err)
 		return
 	}
 	defer res.Body.Close()
 	_, err = ioutil.ReadAll(res.Body)
 	if err != nil {
-		log.Printf("error reading response body :: error is %+v", err)
+		//log.Printf("error reading response body :: error is %+v", err)
 		return
 	}
-	log.Printf("%d  :: ok", id)
+	//log.Printf("%d  :: ok", id)
 }
