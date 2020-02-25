@@ -6,8 +6,8 @@ the code consists of 2 examples a_sequential where the work happens in sequence 
 among several workers. The users can run the examples themselves and see the difference.
 
 
-avg time 10 sequential runs := 17.25387443 Seconds
-avg time 10 concurrent runs := 1.494497171 Seconds
+- avg time 10 sequential runs := 17.25387443 Seconds
+- avg time 10 concurrent runs := 1.494497171 Seconds
 
 
 
