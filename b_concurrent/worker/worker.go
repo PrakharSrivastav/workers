@@ -3,6 +3,7 @@ package worker
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"time"
 )
@@ -25,7 +26,7 @@ type Worker struct {
 	Quit    chan struct{} // a channel to quit working
 }
 
-func New(ID int, JobChan chan Job, JobPool chan chan Job, Quit chan struct{}) *Worker{
+func New(ID int, JobChan chan Job, JobPool chan chan Job, Quit chan struct{}) *Worker {
 	return &Worker{
 		ID:      ID,
 		JobChan: JobChan,
@@ -35,7 +36,7 @@ func New(ID int, JobChan chan Job, JobPool chan chan Job, Quit chan struct{}) *W
 }
 
 func (wr *Worker) Start() {
-	c := &http.Client{Timeout: time.Millisecond * 1000}
+	c := &http.Client{Timeout: time.Millisecond * 15000}
 	go func() {
 		for {
 			// Just put the job in the job pool so that any
@@ -63,19 +64,19 @@ func callApi(num,id int , c *http.Client) {
 	ur := fmt.Sprintf(baseURL, num)
 	req, err := http.NewRequest(http.MethodGet, ur, nil)
 	if err != nil {
-		fmt.Printf("error creating a request for term %s :: error is %+v", num, err)
+		log.Printf("error creating a request for term %d :: error is %+v", num, err)
 		return
 	}
 	res, err := c.Do(req)
 	if err != nil {
-		fmt.Printf("error querying for term %s :: error is %+v", num, err)
+		log.Printf("error querying for term %d :: error is %+v", num, err)
 		return
 	}
 	defer res.Body.Close()
 	_, err = ioutil.ReadAll(res.Body)
 	if err != nil {
-		fmt.Printf("error reading response body :: error is %+v", num, err)
+		log.Printf("error reading response body :: error is %+v", err)
 		return
 	}
-	//log.Printf("%d  :: ok", id)
+	log.Printf("%d  :: ok", id)
 }

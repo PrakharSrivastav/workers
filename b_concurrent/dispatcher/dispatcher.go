@@ -1,7 +1,7 @@
 package dispatcher
 
 import (
-	"github.com/PrakharSrivastav/workers/worker"
+	"github.com/PrakharSrivastav/workers/b_concurrent/worker"
 )
 
 // New returns a new dispatcher. A Dispatcher communicates between the client
@@ -51,8 +51,3 @@ func (d *disp) Submit(job worker.Job) {
 	d.WorkChan <- job
 }
 
-func (d *disp) Stop() {
-	for _, w := range d.Workers {
-		close(w.Quit)
-	}
-}

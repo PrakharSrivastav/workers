@@ -2,6 +2,16 @@
 
 example to create a worker pool using channels and goroutines to provide maximum throughput.
 
+the code consists of 2 examples a_sequential where the work happens in sequence and b_concurrent where the work gets distributed
+among several workers. The users can run the examples themselves and see the difference.
+
+
+avg time 10 sequential runs := 17.25387443 Seconds
+avg time 10 concurrent runs := 1.494497171 Seconds
+
+
+
+Benchmarks for concurrent runs
 
 ### benchmark with 1 worker
 ```shell script
