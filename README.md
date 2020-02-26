@@ -1,5 +1,7 @@
 # concurrent workers in golang
 
+Repository to support the blog [golang-concurrent-worker-pool](https://www.prakharsrivastav.com/posts/golang-concurrent-worker-pool/)
+
 example to create a worker pool using channels and goroutines to provide maximum throughput.
 
 the code consists of 2 examples `a_sequential` where the work happens in sequence and `b_concurrent` where the work gets distributed
