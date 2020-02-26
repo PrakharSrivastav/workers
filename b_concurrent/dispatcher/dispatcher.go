@@ -10,23 +10,23 @@ import (
 // the WorkPool of the dispatcher is common JobPool for all the workers
 func New() *disp {
 	return &disp{
-		WorkChan: make(chan worker.Job),
-		WorkPool: make(chan chan worker.Job),
+		WorkChan: make(worker.JobChannel),
+		Queue: make(worker.JobQueue),
 	}
 }
 
 // disp is the link between the client and the workers
 type disp struct {
 	Workers  []*worker.Worker     // this is the list of workers that dispatcher tracks
-	WorkChan chan worker.Job      // client submits job to this channel
-	WorkPool chan chan worker.Job // this is the shared JobPool between the workers
+	WorkChan worker.JobChannel      // client submits job to this channel
+	Queue worker.JobQueue // this is the shared JobPool between the workers
 }
 
 // Start creates pool of num count of workers.
 func (d *disp) Start(num int) *disp {
 	d.Workers = make([]*worker.Worker, num)
 	for i := 1; i <= num; i++ {
-		wrk := worker.New(i, make(chan worker.Job), d.WorkPool, make(chan struct{}))
+		wrk := worker.New(i, make(worker.JobChannel), d.Queue, make(chan struct{}))
 		wrk.Start()
 		d.Workers = append(d.Workers, wrk)
 	}
@@ -40,9 +40,14 @@ func (d *disp) Start(num int) *disp {
 func (d *disp) process() {
 	for {
 		select {
-		case j := <-d.WorkChan: // listen to a submitted job on WorkChannel
-			work := <-d.WorkPool // pull out a chan chan jobs
-			work <- j            // share the chan job on the pool
+		case job := <-d.WorkChan: // listen to any submitted job on the WorkChan
+			// wait for a worker to submit JobChan to Queue
+			// note that this Queue is shared among all workers.
+			// Whenever there is an available JobChan on Queue pull it
+			jobChan := <-d.Queue
+
+			// Once a jobChan is available, send the submitted Job on this JobChan
+			jobChan <- job
 		}
 	}
 }
@@ -50,4 +55,3 @@ func (d *disp) process() {
 func (d *disp) Submit(job worker.Job) {
 	d.WorkChan <- job
 }
-

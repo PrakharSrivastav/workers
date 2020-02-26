@@ -16,20 +16,23 @@ type Job struct {
 	UpdatedAt time.Time
 }
 
+type JobChannel chan Job
+type JobQueue chan chan Job
+
 // Worker is a a single processor. Typically its possible to
 // start multiple workers for better throughput
 type Worker struct {
 	ID      int           // id of the worker
-	JobChan chan Job      // a channel to receive single unit of work
-	JobPool chan chan Job // pool of job channels. Used for distributing work between workers
+	JobChan JobChannel    // a channel to receive single unit of work
+	Queue   JobQueue      // shared between all workers.
 	Quit    chan struct{} // a channel to quit working
 }
 
-func New(ID int, JobChan chan Job, JobPool chan chan Job, Quit chan struct{}) *Worker {
+func New(ID int, JobChan JobChannel, Queue JobQueue, Quit chan struct{}) *Worker {
 	return &Worker{
 		ID:      ID,
 		JobChan: JobChan,
-		JobPool: JobPool,
+		Queue:   Queue,
 		Quit:    Quit,
 	}
 }
@@ -38,13 +41,17 @@ func (wr *Worker) Start() {
 	c := &http.Client{Timeout: time.Millisecond * 15000}
 	go func() {
 		for {
-			// Just put the job in the job pool so that any
-			// select that is unblocked can process
-			wr.JobPool <- wr.JobChan
+			// when available, put the JobChan again on the JobPool
+			// and wait to receive a job
+			wr.Queue <- wr.JobChan
 			select {
 			case job := <-wr.JobChan:
-				callApi(job.ID,wr.ID,c)
+				// when a job is received, process
+				callApi(job.ID, wr.ID, c)
 			case <-wr.Quit:
+				// a signal on this channel means someone triggered
+				// a shutdown for this worker
+				close(wr.JobChan)
 				return
 			}
 		}
@@ -56,8 +63,7 @@ func (wr *Worker) Stop() {
 	close(wr.Quit)
 }
 
-
-func callApi(num,id int , c *http.Client) {
+func callApi(num, id int, c *http.Client) {
 	baseURL := "https://age-of-empires-2-api.herokuapp.com/api/v1/civilization/%d"
 
 	ur := fmt.Sprintf(baseURL, num)

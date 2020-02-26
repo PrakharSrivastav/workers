@@ -26,7 +26,6 @@ func main() {
 
 	c := &http.Client{Timeout: time.Millisecond * 15000}
 
-
 	for i,num := range terms{
 		callApi(num,i,c)
 	}
