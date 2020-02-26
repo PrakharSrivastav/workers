@@ -11,7 +11,7 @@ import (
 var terms = []int{1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4}
 
 func BenchmarkConcurrent(b *testing.B) {
-	dd := dispatcher.New().Start(3) // start up worker pool
+	dd := dispatcher.New(3).Start() // start up worker pool
 	for n := 0; n < b.N; n++ {
 		for i := range terms {
 			dd.Submit(worker.Job{
@@ -25,7 +25,7 @@ func BenchmarkConcurrent(b *testing.B) {
 }
 
 func BenchmarkNonconcurrent(b *testing.B) {
-	dd := dispatcher.New().Start(3) // start up worker pool
+	dd := dispatcher.New(3).Start() // start up worker pool
 	for n := 0; n < b.N; n++ {
 		for i := range terms {
 			dd.Submit(worker.Job{

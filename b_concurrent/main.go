@@ -10,7 +10,7 @@ import (
 
 func main() {
 	start := time.Now()
-	dd := dispatcher.New().Start(16)
+	dd := dispatcher.New(16).Start()
 
 	terms := []int{1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3,
 		4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3,
